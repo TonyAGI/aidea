@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI-DEA Chat</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  </script>
+  <!-- Add highlight.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/markdown.min.js"></script>
+  <link rel="stylesheet" href="agent.css">
+</head>
+
+<body>
+  <!-- Menu Bar -->
+  <nav class="menu-bar">
+    <div class="menu-container">
+      <ul class="menu-items">
+        <li>
+          <h3 style="margin:0;"><b>AI<></b>DEA*</h3>
+        </li>
+        <li class="menu-logo-img"><img src="AI<:>DEA.png" alt="AI<>DEA Logo" class="ai-logo-transparent"></li>
+        <li><a href="index.html" class="menu-button">Home</a></li>
+        <li><a href="#" class="menu-button active" data-view="ai">AI Response</a></li>
+        <li><a href="#" class="menu-button" data-view="drawing">Drawing</a></li>
+        <li><a href="#" class="menu-button" data-view="notes">Notes</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <div class="main-content chat-full-window">
+    <!-- AI Response View -->
+    <div class="view-container" id="ai-view" style="display: block;">
+      <div class="chat-window">
+        <div class="chat-messages user-messages">
+          <!-- User and AI messages will be added here -->
+        </div>
+        <div class="chat-input-area input-area">
+          <div class="input-container">
+            <div class="message-row">
+              <textarea class="message-input" placeholder="Type your message..."></textarea>
+              <div class="file-previews">
+                <button class="file-preview-btn image-preview-btn" style="display: none;"
+                  title="Click to preview image">
+                  <img class="preview-thumbnail" alt="Image thumbnail">
+                <button class="file-preview-btn pdf-preview-btn" style="display: none;" title="Click to preview PDF">
+                  <span class="pdf-icon">📄</span>
+                  <span class="pdf-name"></span>
+                </button>
+              </div>
+            </div>
+            <div class="input-controls">
+              <div class="left-controls">
+                <input type="file" class="image-input" accept="image/*" style="display: none;">
+                <input type="file" class="pdf-input" accept=".pdf,.epub,.mobi" style="display: none;">
+                <button class="attach-button" title="Attach image">📎</button>
+                <button class="book-button" title="Upload book">📚</button>
+                <div class="model-selector">
+                  <button class="model-button" id="model-button" title="Select AI Model">
+                    <span class="model-name">T-1</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg>
+                  </button>
+                  <div class="model-dropdown" id="model-dropdown">
+                    <div class="model-option active" data-model="temper-1">
+                      <span class="model-short">T-1</span>
+                      <span class="model-full">Temper 1</span>
+                    </div>
+                    <div class="model-option disabled" data-model="temper-1-colossus">
+                      <span class="model-short">T-1-C</span>
+                      <span class="model-full">Temper 1 - Colossus</span>
+                      <span class="model-lock">🔒</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="send-button" title="Send message">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Drawing View -->
+    <div class="view-container" id="drawing-view" style="display: none;">
+      <div class="drawing-layout">
+        <div class="drawing-toolbar">
+          <div class="tool-group">
+            <button class="tool-button active" data-tool="pen" title="Pen">✏️</button>
+            <button class="tool-button" data-tool="pencil" title="Pencil">✏️</button>
+            <button class="tool-button" data-tool="brush" title="Brush">🖌️</button>
+            <button class="tool-button" data-tool="eraser" title="Eraser">🧽</button>
+          </div>
+          <div class="tool-group">
+            <input type="color" class="color-picker" value="#ffffff" title="Color">
+            <input type="range" class="size-slider" min="1" max="20" value="2" title="Size">
+            <span class="size-value">2</span>
+          </div>
+          <div class="tool-group">
+            <button class="clear-button" title="Clear Canvas">🗑️</button>
+            <button class="save-button" title="Save Drawing">💾</button>
+          </div>
+        </div>
+        <div class="drawing-canvas-container">
+          <canvas id="drawing-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+    <!-- Notes View -->
+    <div class="view-container" id="notes-view" style="display: none;">
+      <div class="notes-layout">
+        <div class="notes-panel">
+          <div class="notes-header">
+            <h3>Notes</h3>
+            <button class="add-note-button" title="Add new note">+</button>
+          </div>
+          <div class="notes-list">
+            <!-- Notes will be added here -->
+          </div>
+        </div>
+        <div class="ai-notes-panel">
+          <div class="ai-notes-header">
+            <h3>AI Response</h3>
+          </div>
+          <div class="ai-notes-content">
+            <!-- AI responses for note-taking will be added here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Note Modal -->
+  <div class="modal" id="addNoteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Note</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <form class="note-form">
+        <textarea class="note-textarea" placeholder="Write your note here..."></textarea>
+        <input type="file" class="note-image-input" accept="image/*" style="display: none;">
+        <button type="button" class="note-attach-button" title="Attach image">📎</button>
+        <img class="note-image-preview" alt="Note image preview">
+        <div class="note-buttons">
+          <button type="button" class="cancel-note">Cancel</button>
+          <button type="submit" class="save-note">Save Note</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Note Modal -->
+  <div class="modal view-note-modal" id="viewNoteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>View Note</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="view-note-content"></div>
+      <img class="view-note-image" alt="Note image">
+      <div class="note-timestamp"></div>
+    </div>
+  </div>
+
+  <!-- File Preview Modal -->
+  <div class="modal" id="filePreviewModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="preview-title"></h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="preview-content">
+        <img class="preview-image" alt="Image preview" style="display: none;">
+        <div class="preview-pdf" style="display: none;">
+          <div class="pdf-info">
+            <h4 class="pdf-filename"></h4>
+            <p class="pdf-description">This is what the AI will see from your PDF:</p>
+          </div>
+          <div class="pdf-content-preview"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="storage-service.js"></script>
+  <script src="api-service.js"></script>
+  <script src="ui-components.js"></script>
+  <script src="agent.js"></script>
+</body>
+
+</html>

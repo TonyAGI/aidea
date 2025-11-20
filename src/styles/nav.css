@@ -1,0 +1,105 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  width: 80vw;
+  max-width: 1200px;
+  margin: 32px auto 0 auto;
+  position: relative;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  border-radius: 40px;
+  backdrop-filter: blur(18px) saturate(180%);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  z-index: 999;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 2.5rem;
+}
+
+.navbar-logo {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navbar-logo-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+}
+
+.ai-logo-transparent {
+  height: 56px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Optionally, make the logo li take up more space for centering */
+.navbar-menu {
+  align-items: center;
+}
+
+.navbar-container .navbar-menu {
+  display: flex;
+  text-align: center;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.navbar-container .navbar-menu li a{
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #aaa;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 3px 20px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  transition: all 0.7s ease;
+  white-space: nowrap;
+  
+}
+
+.navbar-container .navbar-menu li a:hover {
+  background: rgba(188, 212, 229, 0.8);
+  color: #000;
+  border: 2px solid #fff;
+}
+
+
+
+.navbar-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+
+}
+
+.bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  margin: 5px auto;
+  transition: all 0.3s ease;
+}
+
+

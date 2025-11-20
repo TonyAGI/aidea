@@ -2,8 +2,8 @@
 class ApiService {
   constructor() {
     this.baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
-    this.apiKey = '/* YOUR OWN AI MODEL*/'; // Your API key
-    this.model = '/* YOUR OWN AI MODEL*/'; // Default model for T-1
+    this.apiKey = ""; // Your API key
+    this.model = ""; // Default model for T-1
     this.systemPrompt = `
 You are AI<>DEA, a highly capable and intelligent virtual assistant designed to understand and support users in their everyday tasks. Your primary focus is:
 1. Summarization: distill books and written content into clear, concise, and insightful overviews.
@@ -70,8 +70,8 @@ Remember: You are the Temper-1 model, the base thinking model of the AI<>DEA fam
   setModel(model) {
     // Map UI model names to actual API model names
     const modelMapping = {
-      'temper-1': '/* YOUR OWN AI MODEL */',
-      'temper-1-colossus': '/* YOUR OWN AI MODEL */'
+      'temper-1': 'meta-llama/llama-4-maverick:free',
+      'temper-1-colossus': 'deepseek/deepseek-r1-0528:free'
     };
     
     this.model = modelMapping[model] || model;

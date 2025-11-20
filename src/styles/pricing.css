@@ -1,0 +1,173 @@
+/* Pricing page styles extracted from pricing.html for easier maintenance */
+
+/* Page background overrides the global site background for pricing */
+.pricing-page {
+  background: #555454;
+  min-height: 100vh;
+  padding-bottom: 64px;
+  color: #111;
+}
+
+.pricing-hero {
+  max-width: 1100px;
+  margin: 120px auto 24px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.pricing-hero h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.pricing-grid {
+  max-width: 1100px;
+  margin: 24px auto 80px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* Liquid glass cards */
+.plan {
+  position: relative;
+  overflow: hidden;
+  /* keep same grey tone but add stronger translucent overlays for glassy depth */
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.08)),
+    linear-gradient(200deg, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0) 45%),
+    rgba(155, 153, 153, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 20px;
+  /* deeper drop shadow + stronger inner highlights for glass thickness */
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  /* stronger glass blur and punch */
+  backdrop-filter: blur(28px) saturate(200%) contrast(1.06) brightness(1.02);
+  -webkit-backdrop-filter: blur(28px) saturate(200%) contrast(1.06) brightness(1.02);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* amplified specular highlights */
+.plan::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(140px 90px at 14% 0%, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0) 72%),
+    radial-gradient(200px 140px at 86% -10%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 72%);
+  pointer-events: none;
+}
+
+/* top sheen strip for liquid gloss */
+.plan::after {
+  content: "";
+  position: absolute;
+  top: -18%;
+  left: -15%;
+  width: 130%;
+  height: 80px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.22), rgba(255,255,255,0));
+  transform: rotate(8deg);
+  filter: blur(6px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.plan.featured {
+  outline: 2px solid #1a73e8;
+}
+
+.plan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.plan h3 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.badge {
+  font-size: 12px;
+  color: #fff;
+  background: #4c58d6;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.price {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.price span {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+
+.features li {
+  margin: 8px 0;
+  color: #333;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.features li .icon {
+  width: 18px;
+  text-align: center;
+  opacity: 0.85;
+}
+
+.cta-btn {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 2px solid #000;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.cta-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.subtle {
+  color: #666;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.fineprint {
+  color: #777;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.hr {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.07);
+  margin: 8px 0;
+  border-radius: 1px;
+} 
