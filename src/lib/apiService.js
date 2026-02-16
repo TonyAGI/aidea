@@ -3,88 +3,77 @@ import OpenAI from 'openai';
 // API Service - Handles OpenRouter API communication
 class ApiService {
   constructor() {
-    this.baseUrl = 'https://openrouter.ai/api/v1';
-    this.apiKey = '';
-    this.model = ''; // Default model for T-1
+    this.baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
+    this.apiKey = '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';
+    this.model = 'qwen/qwen3-235b-a22b:free'; // Default model for T-1
     this.systemPrompt = `
-You are AI<>DEA, a sophisticated virtual assistant designed to provide clear, well-structured, and visually appealing responses. Your output should feel modern, clean, and professional—similar to leading AI platforms.
+You are AI<>DEA, a sophisticated virtual assistant designed to provide clear, well-structured, and visually appealing responses that feel premium and professional.
 
-**Core Principles:**
-1. **Clarity First**: Use clean typography, proper spacing, and logical structure
-2. **Visual Hierarchy**: Use headings, bold text, and lists to organize information
-3. **Consistent Formatting**: All code blocks follow the same elegant style
-4. **Conversational Tone**: Be friendly, knowledgeable, and approachable
+**Core Response Principles:**
+1. **Exceptional Clarity**: Use clean typography, optimal spacing, and logical information architecture
+2. **Visual Hierarchy**: Employ headings, bold text, lists, and code blocks to create scannable content
+3. **Consistent Formatting**: Maintain uniform styling across all elements
+4. **Professional Tone**: Be knowledgeable, approachable, and precise
 
-**Typography & Styling:**
-- Use **bold** for emphasis and key terms
-- Use *italics* for notes and annotations
-- Maintain consistent spacing between elements
-- Use proper heading hierarchy (##, ###) for organization
+**Typography Standards:**
+- Use **bold** for key terms, important concepts, and emphasis
+- Use *italics* for technical notes, annotations, and explanations
+- Maintain consistent spacing (blank lines between sections)
+- Use proper heading hierarchy: ## for main sections, ### for subsections
 
-**Code Presentation (Universal Format):**
-All code blocks use the same sleek format, regardless of language:
+**Code Presentation (CRITICAL):**
+When providing code, ALWAYS follow this modern structure:
 
 \`\`\`language
-// Code here
+// Well-formatted, production-ready code
+// Include helpful inline comments
 \`\`\`
 
-**Default Structure for Code Responses:**
-1. Start with a brief overview
-2. Provide the complete, functional code
-3. End with a clear explanation section
+**For Code Responses:**
+1. **Brief Context** (1-2 lines): What the code does at a high level
+2. **Complete Code Block**: Fully functional, copy-paste ready code
+3. **Clear Explanation Section** with:
+   - **Purpose**: What it accomplishes
+   - **Key Features**: Bullet points highlighting main capabilities
+   - **Usage**: How to implement or run it
+   - **Important Notes**: Any caveats, dependencies, or requirements
 
-**Explanation Section Always Includes:**
-- **What it does**: Brief functionality description
-- **Key features**: Bullet points of main capabilities  
-- **How to use**: Simple implementation guidance
+**Code Quality Standards:**
+- Always specify the language in code blocks (\`\`\`javascript, \`\`\`python, etc.)
+- Include comments for complex logic
+- Use proper indentation and formatting
+- Ensure code is production-ready and follows best practices
+- For file outputs or long text, use appropriate code blocks with clear language tags
 
-**Example Format:**
-\`\`\`javascript
-function example() {
-  // Implementation
-}
+**Text/File Output Formatting:**
+For configuration files, JSON, YAML, or text outputs:
+\`\`\`yaml
+# Use the appropriate language tag
+# Ensure proper formatting
 \`\`\`
 
-**Explanation:**
-- **What it does**: Concise description
-- **Key features**: 
-  - Feature one
-  - Feature two
-- **How to use**: \`example()\`
+**Response Structure:**
+- Start with a concise overview
+- Present code or solution
+- End with detailed explanations
+- Use tables for comparative data
+- Use bullet points for features/steps
 
-**Response Aesthetics:**
-- Use Open Sans-style clean lettering
-- Ensure proper line height (1.6) for readability
-- Maintain consistent padding and margins
-- Use subtle color indicators for different elements
-
-Remember: You are AI<>DEA, the Temper-1 model. Your responses should be as visually polished as they are informative.
-
+Remember: You are AI<>DEA. Every response should be visually polished, technically accurate, and exceptionally readable. Code should be production-quality, and explanations should be crystal clear.
 `;
-
-    this.client = this.createClient(this.apiKey);
-  }
-
-  createClient(apiKey) {
-    return new OpenAI({
-      apiKey,
-      baseURL: this.baseUrl,
-      dangerouslyAllowBrowser: true,
-    });
   }
 
   setApiKey(apiKey) {
     this.apiKey = apiKey;
-    this.client = this.createClient(apiKey);
   }
 
   setModel(model) {
     // Map UI model names to actual API model names
     const modelMapping = {
-      'temper-1': 'openrouter/sherlock-think-alpha',
+      'temper-1': 'qwen/qwen3-235b-a22b:free',
       'temper-1-colossus': 'deepseek/deepseek-r1-0528:free'
     };
-    
+
     this.model = modelMapping[model] || model;
     console.log('Model set to:', this.model);
   }
@@ -108,16 +97,42 @@ Remember: You are AI<>DEA, the Temper-1 model. Your responses should be as visua
       const content = this.prepareMessageContent(messageText, imageUrl, pdfContent);
       const messages = this.buildMessageHistory(chatHistory, content);
 
-      const apiResponse = await this.client.chat.completions.create({
-        model: this.model,
-        messages,
-        reasoning: { enabled: true },
+      const response = await fetch(this.baseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`,
+          'HTTP-Referer': window.location.origin,
+          'X-Title': 'AI<>DEA'
+        },
+        body: JSON.stringify({
+          messages,
+          model: this.model,
+        }),
       });
+
+      if (!response.ok) {
+        // Try to get error details from response
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          if (errorData.error) {
+            errorMessage = `API Error (${response.status}): ${typeof errorData.error === 'string' ? errorData.error : JSON.stringify(errorData.error)}`;
+          }
+        } catch (e) {
+          // If response is not JSON, use status text
+          errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        }
+        console.error('API Error Details:', errorMessage);
+        throw new Error(errorMessage);
+      }
+
+      const apiResponse = await response.json();
       const assistantMessage = apiResponse?.choices?.[0]?.message;
 
       if (assistantMessage) {
         const normalizedContent = this.normalizeAssistantContent(assistantMessage.content);
-        
+
         // Populate reasoning controller if reasoning details exist
         if (window.reasoningController && assistantMessage.reasoning_details) {
           window.reasoningController.populateReasoning(
@@ -125,7 +140,7 @@ Remember: You are AI<>DEA, the Temper-1 model. Your responses should be as visua
             apiResponse.id || `msg_${Date.now()}`
           );
         }
-        
+
         return {
           success: true,
           content: normalizedContent,
@@ -138,10 +153,12 @@ Remember: You are AI<>DEA, the Temper-1 model. Your responses should be as visua
       }
     } catch (error) {
       console.error('Error sending message to API:', error);
+      // Show the actual error message to help with debugging
+      const errorMsg = error.message || 'Unknown error occurred';
       return {
         success: false,
-        error: error.message,
-        content: 'Sorry, I encountered an error while processing your request. Please try again.'
+        error: errorMsg,
+        content: `Error: ${errorMsg}\n\nPlease check the browser console for more details.`
       };
     }
   }
@@ -200,25 +217,8 @@ Remember: You are AI<>DEA, the Temper-1 model. Your responses should be as visua
 
   // Get available models (if API supports it)
   async getAvailableModels() {
-    try {
-      const response = await fetch('https://openrouter.ai/api/v1/models', {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'AI<>DEA'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data.data || [];
-    } catch (error) {
-      console.error('Error fetching available models:', error);
-      return [];
-    }
+    // Mock implementation since we are proxying
+    return [];
   }
 
   // Process response content for display

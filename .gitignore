@@ -22,3 +22,79 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ========================
+# Environment & Secrets
+# ========================
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.test
+!.env.example
+
+# API keys & credentials
+*.key
+*.pem
+*.cert
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# ========================
+# Server & Runtime
+# ========================
+# Server config with potential secrets
+server.config.json
+config.local.json
+config.secret.json
+secrets.json
+credentials.json
+
+# Process & PID files
+*.pid
+*.seed
+*.pid.lock
+
+# Runtime data
+pids
+*.gz
+*.tgz
+
+# ========================
+# Database
+# ========================
+*.sqlite
+*.sqlite3
+*.db
+*.sql.bak
+
+# ========================
+# OS & System Files
+# ========================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.Spotlight-V100
+.Trashes
+._*
+
+# ========================
+# Build & Coverage
+# ========================
+coverage
+*.lcov
+.nyc_output
+.cache
+.parcel-cache
+.next
+.nuxt
+.turbo
+build
+out
+tmp
+temp

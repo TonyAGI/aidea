@@ -461,12 +461,11 @@ class UIComponents {
         return `<div class="code-block-container">
           <div class="code-block-header">
             <span class="code-language">${lang.toUpperCase()}</span>
-            <button class="copy-code-btn" onclick="window.uiComponents.copyCodeBlock('${codeId}')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            <button class="copy-code-btn" onclick="window.uiComponents.copyCodeBlock('${codeId}')" title="Copy Code">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="white"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="white"></path>
               </svg>
-              Copy
             </button>
           </div>
           <pre><code id="${codeId}" class="language-${lang}">${this.escapeHtml(cleanCode)}</code></pre>
